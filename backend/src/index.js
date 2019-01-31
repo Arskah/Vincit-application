@@ -12,7 +12,7 @@ const app = new Koa();
 router.get('/api/', async ctx => {
 });
 
-app.keys = ['keys', 'keykeys'];
+app.keys = [ 'keys', 'keykeys', ];
 app.use(session({
   store: redisStore({
     // Options specified here
