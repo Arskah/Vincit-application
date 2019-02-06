@@ -2,13 +2,20 @@ version: '3'
 
 services:
   db:
-    image: 'redis'
+    image: 'postgres'
+  redis:
+    image: redis
+    expose:
+      - 6379
+
   frontend:
     build: ./frontend
     ports:
       - "3000:3000"
     volumes:
       - ./frontend/src:/app/src
+    environment:
+      - API_URL=localhost:8000/api
     
   backend:
     build: ./backend
@@ -16,3 +23,7 @@ services:
       - "8000:8000"
     volumes:
       - ./backend/src:/app/src
+    links:
+      - redis
+    environment:
+      - REDIS_URL=redis://redis
