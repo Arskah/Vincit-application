@@ -3,6 +3,7 @@ const redis = require('redis');
 const redisClient = redis.createClient(process.env.REDIS_URL);
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+io.removeAllListeners();
 // const socketioAuth = require('socketio-auth');
 
 const PORT = process.env.PORT || 8000;
@@ -71,36 +72,42 @@ redisClient.GET('counter', (err, value) => {
 io.on('connection', (socket) => {
   var address = socket.request.connection.remoteAddress;
   console.log(`client (${address}) connected`);
-  socket.on('disconnect', (socket) => {
+
+  // Server posts updates every 100ms
+  const interval = setInterval(() => {
+    socket.emit('clicksleft', { counter: clicksLeft, });
+  }, 100);
+
+  socket.on('disconnect', () => {
+    clearInterval(interval);
     console.log(`client (${address}) disconnected`);
   });
 
-  // Server posts updates every 100ms
-  setInterval(() => {
-    socket.emit('update', { counter: clicksLeft, });
-  }, 100);
-
   // Handle increments from clients
   socket.on('increment', () => {
-    redisClient.INCR('counter', (err, res) => {
+    redisClient.incr('counter', (err, res) => {
       if (err) {
         console.error(err);
         return;
       }
       clicksLeft = 100 - res % 100;
-
-      // Rewards are broadcasted for every user
-      if (res % 500 === 0) {
-        socket.emit('reward', BIG_REWARD);
-        io.emit('list_reward', { ip: address, ts: Date.now().toString(), });
-      } else if (res % 200 === 0) {
-        socket.emit('reward', MED_REWARD);
-        io.emit('list_reward', { ip: address, ts: Date.now().toString(), });
-      } else if (res % 100 === 0) {
-        socket.emit('reward', SMALL_REWARD);
-        io.emit('list_reward', { ip: address, ts: Date.now().toString(), });
-      } else {
-        socket.emit('reward', NO_REWARD);
+      const date = new Date().toLocaleString();
+      switch (true) {
+        case (res % 500 === 0):
+          socket.emit('reward', BIG_REWARD);
+          io.emit('list_reward', { ip: address, ts: date, });
+          break;
+        case res % 200 === 0:
+          socket.emit('reward', MED_REWARD);
+          io.emit('list_reward', { ip: address, ts: date, });
+          break;
+        case res % 100 === 0:
+          socket.emit('reward', SMALL_REWARD);
+          io.emit('list_reward', { ip: address, ts: date, });
+          break;
+        default:
+          // io.emit('list_reward', { ip: address, ts: date, });
+          socket.emit('reward', NO_REWARD);
       }
     });
   });
