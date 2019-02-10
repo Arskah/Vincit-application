@@ -9,8 +9,6 @@ io.removeAllListeners();
 const PORT = process.env.PORT || 8000;
 // const SECRET = process.env.SECRET;
 
-const winners = [];
-
 const BIG_REWARD = {
   reward: 'Jackpot!',
 };
@@ -62,6 +60,8 @@ redisClient.on('error', (err) => {
 // Setup
 redisClient.SETNX('counter', 0);
 var clicksLeft = 0;
+var winners = [];
+redisClient.SETNX('winners', JSON.stringify([]));
 redisClient.GET('counter', (err, value) => {
   if (err) {
     console.error(err);
@@ -69,6 +69,19 @@ redisClient.GET('counter', (err, value) => {
   }
   clicksLeft = 100 - value % 100;
 });
+redisClient.GET('winners', (err, value) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+  winners = JSON.parse(value);
+});
+
+const addWinner = async (winner) => {
+  winners.push(winner);
+  redisClient.SET('winners', JSON.stringify(winners));
+  io.emit('list_reward', winner);
+};
 
 // Triggered for each connecting client
 io.on('connection', (socket) => {
@@ -99,19 +112,16 @@ io.on('connection', (socket) => {
 
       switch (true) {
         case (res % 500 === 0):
-          winners.push(winner);
+          addWinner(winner);
           socket.emit('reward', BIG_REWARD);
-          io.emit('list_reward', winner);
           break;
         case res % 200 === 0:
-          winners.push(winner);
+          addWinner(winner);        
           socket.emit('reward', MED_REWARD);
-          io.emit('list_reward', winner);
           break;
         case res % 100 === 0:
-          winners.push(winner);
+          addWinner(winner);
           socket.emit('reward', SMALL_REWARD);
-          io.emit('list_reward', winner);
           break;
         default:
           // io.emit('list_reward', { ip: address, ts: date, });
