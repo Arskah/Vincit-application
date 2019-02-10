@@ -11,19 +11,20 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - "3000:3000"
+      - "${PORT_F}:${PORT_F}"
     volumes:
       - ./frontend/src:/app/src
     environment:
-      - API_URL=http://localhost:8000/
+      - REACT_APP_API_URL=${REACT_APP_API_URL}
     
   backend:
     build: ./backend
     ports:
-      - "8000:8000"
+      - "${PORT}:${PORT}"
     volumes:
       - ./backend/src:/app/src
     links:
       - redis
     environment:
-      - REDIS_URL=redis://redis
+      - REDIS_URL=${REDIS_URL}
+      - PORT=${PORT}

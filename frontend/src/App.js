@@ -4,7 +4,7 @@ import Counter from './components/Counter';
 import Winners from './components/Winners';
 import io from 'socket.io-client';
 
-const API_URL = process.env.API_URL || "http://localhost:8000";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 class App extends Component {
   constructor(props) {
