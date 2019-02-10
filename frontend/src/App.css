@@ -8,7 +8,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #0D1B1E;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -28,5 +28,37 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+.App-container {
+  padding-top: 5rem;
+  min-height: 80vh;
+  max-height: 80vh;
+  min-width: 100vw;
+  flex: 1;
+  display: flex;
+}
+
+.winners {
+  font-size: medium;
+  line-height: 0.1rem;
+  overflow-y: scroll;
+  flex: 1;
+  background-color: #7798AB;
+  color: #E8DCB9;
+  margin: 5rem;
+  border-style: solid;
+  border-color: #FFF;
+  border-width: 4px;
+}
+
+.game-container {
+  flex: 3;
+}
+
+@media (max-width: 800px) {
+  .App-container {
+    flex-direction: column-reverse;
   }
 }

@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import './Counter.css';
 
 class Counter extends Component {
   render() {
     const { value, onIncrement } = this.props
     return (
-      <p>
-        Until next win: {value} clicks
-        {' '}
-        <button onClick={onIncrement}>
-          +
+      <div className="counter">
+        <p>
+          Until next win: {value} clicks
+        </p>
+        <button className="button" onClick={onIncrement}>
+          WIN!!!
         </button>
-      </p>
+      </div>
+
     )
   }
 }

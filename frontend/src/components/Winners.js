@@ -5,14 +5,16 @@ class Winners extends Component {
   render() {
     const { winners } = this.props;
     return (
-      <div className='winners'>
+      <div>
+        <h3>
+          All winners:
+        </h3>
         {winners.map((winner, index) => {
           return <p key={index}>
             {winner.ip} won at {winner.ts}!
           </p>
         })}
       </div>
-
     )
   }
 }
