@@ -44,21 +44,27 @@
   font-size: medium;
   line-height: 0.1rem;
   overflow-y: scroll;
-  flex: 1;
+  flex: 2;
   background-color: #7798AB;
   color: #E8DCB9;
-  margin: 5rem;
+  margin: 1rem;
   border-style: solid;
   border-color: #FFF;
   border-width: 4px;
 }
 
 .game-container {
-  flex: 3;
+  flex: 1;
 }
 
 @media (max-width: 800px) {
   .App-container {
     flex-direction: column-reverse;
+  }
+  
+  .winners {
+    font-size: smaller;
+    word-wrap: break-word;
+    margin: 0.5rem;
   }
 }
