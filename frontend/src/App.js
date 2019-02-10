@@ -17,9 +17,12 @@ class App extends Component {
     this.socket.on('clicksleft', (input) => {
       store.dispatch({ type: 'UPDATE', value: input.counter, });
     });
+    this.socket.on('winner_list', (input) => {
+      winner_store.dispatch({ type: 'ALL_WINNERS', winners: input });
+
+    })
     this.socket.on('list_reward', (input) => {
-      console.log(input);
-      winner_store.dispatch({ type: 'ADD_WINNER', ip: input.ip, ts: input.ts, })
+      winner_store.dispatch({ type: 'ADD_WINNER', ip: input.ip, ts: input.ts, });
     });
     this.socket.on('reward', (input) => {
       this.setState({

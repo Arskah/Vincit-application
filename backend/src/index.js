@@ -9,6 +9,8 @@ io.removeAllListeners();
 const PORT = process.env.PORT || 8000;
 // const SECRET = process.env.SECRET;
 
+const winners = [];
+
 const BIG_REWARD = {
   reward: 'Jackpot!',
 };
@@ -72,6 +74,7 @@ redisClient.GET('counter', (err, value) => {
 io.on('connection', (socket) => {
   var address = socket.request.connection.remoteAddress;
   console.log(`client (${address}) connected`);
+  socket.emit('winner_list', winners);
 
   // Server posts updates every 100ms
   const interval = setInterval(() => {
@@ -92,18 +95,23 @@ io.on('connection', (socket) => {
       }
       clicksLeft = 100 - res % 100;
       const date = new Date().toLocaleString();
+      const winner = { ip: address, ts: date, };
+
       switch (true) {
         case (res % 500 === 0):
+          winners.push(winner);
           socket.emit('reward', BIG_REWARD);
-          io.emit('list_reward', { ip: address, ts: date, });
+          io.emit('list_reward', winner);
           break;
         case res % 200 === 0:
+          winners.push(winner);
           socket.emit('reward', MED_REWARD);
-          io.emit('list_reward', { ip: address, ts: date, });
+          io.emit('list_reward', winner);
           break;
         case res % 100 === 0:
+          winners.push(winner);
           socket.emit('reward', SMALL_REWARD);
-          io.emit('list_reward', { ip: address, ts: date, });
+          io.emit('list_reward', winner);
           break;
         default:
           // io.emit('list_reward', { ip: address, ts: date, });

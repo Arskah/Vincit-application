@@ -1,6 +1,8 @@
 export default (state = [], action) => {
 
   switch (action.type) {
+    case 'ALL_WINNERS':
+      return action.winners;
     case 'ADD_WINNER':
       return [
         ...state,
@@ -8,8 +10,8 @@ export default (state = [], action) => {
           ip: action.ip,
           ts: action.ts,
         }
-      ]
+      ];
     default:
-      return state
+      return state;
   }
 }
