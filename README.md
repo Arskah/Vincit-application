@@ -3,6 +3,7 @@
 React app with node backend. Communication to backend is implemented with websocket for duplex communication.
 
 ## Game rules
+
 Every 100 click wins. Categories are
 
 ```js
@@ -39,13 +40,14 @@ cd backend
 npm start
 ```
 
-Note that backend requires 'redis' to be running.
+Note that backend requires 'Redis' to be running.
 
-## TODO
+## What next
 
 - Authentication and login with JSON Web token
 - PostgreSQL server for saving winners and users
-  - Allows player usernames
+  - Allows player usernames and authentication
+- Snapshotting Redis db to PostgreSQL
 
 ## Hosted App
 
