@@ -7,4 +7,4 @@ RUN npm i
 COPY ./src ./src
 
 EXPOSE 8000
-CMD ["npm", "start-prod"]
+CMD ["npm", "run", "start-prod"]
