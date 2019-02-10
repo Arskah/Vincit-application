@@ -8,4 +8,4 @@ COPY ./src ./src
 COPY ./public ./public
 
 EXPOSE 3000
-CMD ["npm", "run", "build"]
+CMD ["npm", "start"]

@@ -1,8 +1,8 @@
 version: '3'
 
 services:
-  db:
-    image: 'postgres'
+  # db:
+  #   image: 'postgres'
   redis:
     image: redis
     expose:
@@ -11,7 +11,7 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - "${PORT_F}:${PORT_F}"
+      - "3000:3000"
     volumes:
       - ./frontend/src:/app/src
     environment:
